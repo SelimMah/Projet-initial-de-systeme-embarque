@@ -1,0 +1,79 @@
+ Auteurs: Selim Mahjoub - 2193614,
+          Mohamed Afandi - 2291005,
+          Bryan Alexandre Tavares - 2291297
+          Brice Tangmouo Manfo - 2275762
+          
+R1 ---------------------------------------------------------------------------
+
+Descritption du programme : 
+
+Le programme commence par initialiser les paramètres nécessaires, puis il récupère les données provenant d'un capteur de distance placé sur le robot. Ces données sont collectées à l'aide de la méthode recupererDonnee() de la classe DistanceSensor. Ensuite, les données reçues sont vérifiées pour s'assurer de leur validité en calculant un code de contrôle de redondance cyclique (CRC) à l'aide de la méthode crcDonnee() et en comparant ce code avec celui reçu. Si les données sont valides, elles sont stockées dans des tableaux appropriés.
+
+Une fois les données vérifiées et stockées, elles sont utilisées pour extraire les informations nécessaires à partir d'elles, telles que les longueurs des branches et les informations de dessin de la table. Le programme comporte également des méthodes pour contrôler les mouvements du robot en fonction des données reçues. Par exemple, la méthode mouvementWall() dirige le robot vers le marqueur rouge central dans la boîte en fonction des mesures de distance.
+
+Une fois que le robot est positionné correctement et que les données sont traitées, le programme utilise la classe Drawer pour dessiner la trajectoire du robot sur un écran. Enfin, le programme fonctionne dans une boucle principale où il passe par différents états en fonction de l'état actuel du robot et des actions à effectuer. Ces états comprennent la recherche de la distance, le balayage de la zone, l'attente de la réception des données, et l'affichage des données sur un écran.
+
+Liste de branchement : 
+
+Pour ce qui est du branchement des composants, le capteur de distance est soigneusement connecté pour assurer son bon fonctionnement. Ses broches d'alimentation (VCC et GND) sont reliées respectivement aux broches VCC et GND du PORT A du microcontrôleur. Quant à la sortie analogique (V0) du capteur de distance, elle est connectée à la broche 1 du PORT A.
+
+Concernant les moteurs, les broches gauches du circuit de modulation de largeur d'impulsion (PWM) sont connectées aux broches 3 et 5 du PORT B, tandis que les broches droites sont reliées aux broches 4 et 6 du même PORT B. Cette disposition assure un contrôle précis et synchronisé des moteurs pour garantir la mobilité du robot.
+
+Pour le récepteur infrarouge, les connexions sont établies de manière à assurer une réception efficace des signaux. Les broches de masse (GND) et d'alimentation (VCC) du récepteur sont connectées aux broches GND et VCC du PORT B, respectivement. Ensuite, la broche de sortie (Vout) du récepteur est connectée à la broche 4 du PORT D, permettant au microcontrôleur de recevoir les signaux infrarouges émis par d'autres dispositifs.
+
+Les autres broches disponibles sont également utilisées de manière efficiente : les broches libres sont connectées aux broches 5 et 6 du PORT D pour faire allumer la LED, tandis que le pisot est connecté aux broches 7 et 8 du même PORT D.
+
+Description des états :
+
+L'état FIND_DISTANCE vise à localiser précisément le point rouge situé au centre de la boîte. Pour ce faire, il utilise la méthode mouvementWall() afin d'effectuer cette manœuvre avec précision.
+
+Une fois que le centre est trouvé, le robot passe à l'état SWEEPING. Dans cet état, il balaye la zone jusqu'à ce qu'il trouve l'ouverture de la boîte.
+
+Une fois l'ouverture repérée, le robot se met en mode WAITING. Dans cet état, il attend la réception d'un signal infrarouge et allume sa LED en rouge pour signaler son attente. Dès que le signal est détecté, le robot passe à l'état RECEPTIONIR.
+
+Dans l'état RECEPTIONIR, le robot stocke en mémoire le circuit parcouru par le R2 et allume sa LED en vert pour indiquer la réception réussie du signal infrarouge. Cependant, si le signal n'est pas détecté, le robot retourne à l'état WAITING et réallume sa LED en rouge pour signaler l'échec de la réception.
+
+Enfin, le robot passe en mode RS_232 dès qu'un simple appui sur le bouton Interrupt est effectué. Dans ce mode, il fait clignoter sa LED en vert à une fréquence de 5 Hz pendant qu'il envoie les données à l'ordinateur. Ce mode permet au robot de communiquer efficacement avec l'ordinateur et de transférer les informations collectées lors de sa mission.
+
+R2 ---------------------------------------------------------------------------
+
+Descritption du programme : 
+
+Le robot 2 est conçu pour effectuer un parcours où il doit suivre une ligne noire tout en détectant les nouveaux segments ajoutés et en mesurant leur longueur à l'aide du capteur Maker Line. Une fois son parcours terminé, il entre en mode attente.
+
+En mode attente, le R2 peut basculer soit en mode infrarouge (IR), soit en mode RS232. En mode IR, il attend pendant deux secondes l'envoi de ses données, puis il retourne automatiquement en mode attente. En mode RS232, il reste en attente jusqu'à ce que son bouton interrupteur soit activé. Une fois cela fait, il procède à l'affichage du dessin correspondant aux données reçues, puis revient en mode RS232.
+
+Liste de branchement : 
+- Le bouton externe est connecté au microcontrôleur via la broche PORTC PIN 3. Les fils du bouton sont branchés avec le fil de terre (GRD) au fil blanc et le fil d'alimentation (VCC) au fil vert. Le fil de signal (maron) est connecté à la broche PORTC PIN 3.
+
+- La LED infra-rouge est connectée au microcontrôleur via la broche PORTD PIN 6. Le fil de terre (GRD) est connecté au fil rouge, assurant ainsi la mise à la terre de la LED.
+Le mode CTC avec une fréquence de 38 kHz est activé sur la broche PORTD PIN 6, permettant la modulation du signal infrarouge pour la communication à distance.
+
+- Concernant les moteurs, les broches gauches du circuit de modulation de largeur d'impulsion (PWM) sont connectées aux broches 3 et 5 du PORT B, tandis que les broches droites sont reliées aux broches 4 et 6 du même PORT B. Cette disposition assure un contrôle précis et synchronisé des moteurs pour garantir la mobilité du robot.
+
+- Les capteurs de ligne sont connecte de gauche a droite sur le port A et de la broche 3 a 7. la carte merre allimente aussi le capteur avec vcc et GND.
+
+- La LED est connectée aux broches 5 et 7 du port D du microcontrôleur. Cela permet un contrôle précis de l'allumage et de l'extinction de la LED par le microcontrôleur.
+
+- Le buzzer (pizo) est connecté à la broche 8 du microcontrôleur ainsi qu'à la tension d'alimentation VCC. Cette configuration permet au microcontrôleur de générer des signaux sonores en activant et désactivant le buzzer selon les besoins du programme.
+
+Description des états :
+
+État initial (R2): Avant d'être mis sous tension, R2 est placé sur la table avec son centre de rotation sur D et son nez pointant vers A.
+
+Une fois sous tension, R2 effectue un tour complet du cadre en sens horaire. Pendant son déplacement, il mémorise l'emplacement des segments ajoutés par l'évaluateur et détermine leur longueur en effectuant un suivi de ligne.
+
+Après avoir complété le tour du cadre, R2 se dirige vers l'ouverture de la boîte et place son nez sur le point C, marquant ainsi sa position finale. Le trajet parcouru par R2 est alors A, B, F, E, D, C. À ce stade, le robot entre en mode "attente".
+
+En mode attente, R2 allume sa DEL en rouge et attend une instruction. L'évaluateur peut soit appuyer sur le bouton Interrupt, soit sur le bouton blanc.
+
+Si le bouton Interrupt est appuyé, R2 émet trois sons aigus séparés par des silences et passe en mode "envoi IR".
+
+Si le bouton blanc est pressé après avoir connecté R2 à un PC et lancé l'application serieViaUSB, R2 passe en mode "envoi RS-232".
+
+En entrant dans ce mode, R2 éteint sa DEL, attend deux secondes, puis envoie les données à R1 via infrarouge. Une fois l'envoi terminé, il retourne au mode "attente".
+
+En entrant dans ce mode, R2 démarre immédiatement l'envoi des données via RS-232. Pendant la transmission, la DEL clignote en vert à une fréquence de 5 Hz. Une fois l'envoi complété, R2 retourne au mode "attente".
+
+
+
