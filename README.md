@@ -2,22 +2,23 @@
 
 ## 🎥 Vidéos du Projet
 <div style="display: flex; gap: 20px;">
-  <div>
+  <div style="flex: 1;">
     <h4>Vidéo 1 : IMG_1659.mov</h4>
-    <video controls width="50%">
-      <source src="ReadMeCaptures/IMG_1659.mov" type="video/mp4">
+    <video controls style="width: 100%;">
+      <source src="ReadMeCaptures/IMG_1653.mov" type="video/mp4">
       Votre navigateur ne supporte pas l'élément vidéo.
     </video>
   </div>
 
-  <div>
+  <div style="flex: 1;">
     <h4>Vidéo 2 : IMG_1664.mov</h4>
-    <video controls width="50%">
+    <video controls style="width: 100%;">
       <source src="ReadMeCaptures/IMG_1664.mov" type="video/mp4">
       Votre navigateur ne supporte pas l'élément vidéo.
     </video>
   </div>
 </div>
+
 
 ---
 
@@ -46,41 +47,45 @@ Les spécifications complètes des robots et de leurs états sont détaillées c
 
 ### 🟦 Robot R1
 
-**Fonctionnalité principale** : 
-- Utilisation d'un capteur de distance pour explorer un environnement.
-- Analyse des données collectées et dessin des trajectoires.
+**Description du programme :**
+- Le programme initialise les paramètres, collecte les données du capteur de distance via `recupererDonnee()`, et vérifie leur validité avec un CRC calculé par `crcDonnee()`. Les données valides sont stockées pour un traitement ultérieur.
+- Contrôle des mouvements via `mouvementWall()` pour localiser un marqueur rouge, suivi de la gestion des trajectoires avec la classe `Drawer`.
+- Les états permettent au robot d'explorer, balayer, attendre des signaux infrarouges, recevoir et transmettre des données via RS-232.
 
-**États :**  
-1. **FIND_DISTANCE** : Localisation du point central rouge.  
-2. **SWEEPING** : Balayage pour détecter l'ouverture.  
-3. **WAITING** : Signal infrarouge en attente.  
-4. **RECEPTIONIR** : Réception des données de R2.  
-5. **RS_232** : Transmission des données au PC.
+**États :**
+1. **FIND_DISTANCE** : Localisation du point central rouge.
+2. **SWEEPING** : Balayage pour détecter l'ouverture.
+3. **WAITING** : Signal infrarouge en attente.
+4. **RECEPTIONIR** : Réception des données de R2 et stockage en mémoire.
+5. **RS_232** : Transmission des données au PC, avec clignotement LED vert (5 Hz).
 
-**Branchements :** 
-- Capteur de distance connecté au PORT A.  
-- Moteurs reliés au PORT B.  
-- LED et récepteur infrarouge connectés au PORT D.  
+**Branchements :**
+- **Capteur de distance** : Alimentation (VCC et GND) connectée à PORT A.
+- **Moteurs** : Contrôlés via PORT B, broches 3, 4, 5, et 6 pour le PWM.
+- **Récepteur infrarouge** : Sortie connectée à PORT D, broche 4.
+- **LED** : Connectées à PORT D, broches 5 et 6.
 
 ---
 
 ### 🟩 Robot R2
 
-**Fonctionnalité principale** :  
-- Suivi d'une ligne noire pour détecter et mesurer des segments.  
-- Transmission des données via infrarouge ou RS-232.
+**Description du programme :**
+- R2 suit une ligne noire, détecte les segments ajoutés, et mesure leur longueur avec les capteurs de ligne.
+- Après son parcours, il entre en mode attente pour transmettre les données via infrarouge ou RS-232 selon les instructions reçues.
 
-**États :**  
-1. **Parcour** : Suivi de la ligne et mesure des segments.  
-2. **Waiting** : Mode attente avec LED rouge.  
-3. **SendIR** : Transmission des données à R1 via infrarouge.  
-4. **SendRS232** : Transmission des données au PC via RS-232.
+**États :**
+1. **Suivi de ligne** : Parcours de la ligne noire pour détecter et mesurer les segments.
+2. **Mode attente** : LED rouge allumée.
+3. **Envoi IR** : Transmission des données à R1 via infrarouge.
+4. **Envoi RS-232** : Transmission des données au PC via RS-232, avec clignotement LED vert (5 Hz).
 
-**Branchements :**  
-- Bouton connecté au PORTC PIN 3.  
-- LED infrarouge sur PORTD PIN 6.  
-- Capteurs de ligne sur PORTA PIN 3 à 7.  
-- Moteurs connectés au PORT B.
+**Branchements :**
+- **Bouton externe** : PORTC PIN 3.
+- **LED infrarouge** : PORTD PIN 6, modulée à 38 kHz.
+- **Capteurs de ligne** : Connectés de PORTA PIN 3 à 7.
+- **Moteurs** : Contrôlés via PORT B, broches 3, 4, 5, et 6.
+- **LED** : Connectées à PORT D, broches 5 et 7.
+- **Buzzer** : Connecté à PORT D, broche 8.
 
 ---
 
@@ -194,6 +199,31 @@ Module de communication série :
 2. **Chargement** : Flashez le microcontrôleur avec les fichiers binaires générés.
 3. **Configuration des branchements** : Vérifiez les branchements selon les schémas détaillés dans `LISEZMOI.txt`.
 4. **Exécution** : Lancez les robots en suivant les instructions fournies dans la documentation technique.
+
+---
+
+## ✍️ Contribution personnelle
+
+Cette section détaille les parties du proket que j'ai personnellement codées :
+
+- 🔘 `Button.h` : Gestion des boutons et des interruptions.
+- 🎛️ `can.h` : Interface pour la conversion analogique-numérique.
+- 🐞 `Debug.h` : Outils de débogage en temps réel.
+- 🖋️ `Draw.h` : Dessin des trajectoires sur écran.
+- 🚗 `Driver.h` : Contrôle des moteurs.
+- 📥 `IR_Reception.h` : Décodage des signaux infrarouges.
+- 📤 `IR_Transmission.h` : Envoi de données infrarouges.
+- 💡 `LED.h` : Gestion des LEDs (rouge, vert, ambre).
+- 🛤️ `LineFollower.h` : Suivi précis des lignes noires.
+- 🧠 `memoire_24.h` : Gestion des mémoires EEPROM I2C.
+- 🔄 `Motor.h` : Contrôle de vitesse des moteurs.
+- 🧰 `Progmem.h` : Gestion des instructions en mémoire flash.
+- 🎚️ `PWM.h` : Modulation de largeur d'impulsion pour moteurs.
+- 🤖 `Robot.h` : Coordination des composants du robot.
+- 🎵 `Sing.h` : Génération de tonalités sonores.
+- ⏱️ `Timer.h` : Gestion des temporisations.
+- 📨 `UART.h` : Communication série UART.
+- 🟩 **Robot R2** : Développement complet des fonctionnalités, y compris le suivi de ligne, la gestion des états et la transmission des données.
 
 ---
 
