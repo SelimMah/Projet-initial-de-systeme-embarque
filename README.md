@@ -1,9 +1,23 @@
 # 📖 README - Projet Robotique
 
 ## 🎥 Vidéos du Projet
-Ajoutez ici les liens vers les vidéos démontrant le fonctionnement des robots :
-- [Démonstration du Robot R1](#)
-- [Démonstration du Robot R2](#)
+<div style="display: flex; gap: 20px;">
+  <div>
+    <h4>Vidéo 1 : IMG_1659.mov</h4>
+    <video controls width="50%">
+      <source src="ReadMeCaptures/IMG_1659.mov" type="video/mp4">
+      Votre navigateur ne supporte pas l'élément vidéo.
+    </video>
+  </div>
+
+  <div>
+    <h4>Vidéo 2 : IMG_1664.mov</h4>
+    <video controls width="50%">
+      <source src="ReadMeCaptures/IMG_1664.mov" type="video/mp4">
+      Votre navigateur ne supporte pas l'élément vidéo.
+    </video>
+  </div>
+</div>
 
 ---
 
